@@ -5,3 +5,4 @@ library(stringr)
 uniType = function(type){
   return(str_replace_all(type,"ss","sh"))
 }
+

@@ -6,26 +6,10 @@ print(mongo.get.databases(mg2))
 namespace <- "database.stocks"
 print(mongo.get.database.collections(mg2, namespace))
 
-insertHistory = function(id,mongoConnection,tableName){
-  if(!mongo.is.connected(mongoConnection)){
-    print("mongo connection is already closed!")
-    return
-  }
-  input = read.table(paste("data/history/",id,".csv",sep=""),sep=",",header = TRUE)
-  id = uniType(id)
-  print(paste("start to insert ",id," with ", nrow(input), sep =""))
-  input$id=id
-  for( i in seq(1,nrow(input))){
-    json = toJSON(input[i,])
-    bson = mongo.bson.from.JSON(json)
-    if(!mongo.insert(mongoConnection,tableName,bson)){
-      print(paste("failed to insert:",json))
-    }
-  }
-}
+
 historyFiles = as.list(str_replace(list.files("data/history/"),".csv",""))
 
-lapply(historyFiles,insertHistory, mongoConnection=mg2,tableName = namespace)
+
 json = toJSON(unname(split(test, 1:nrow(test))))
 bson = mongo.bson.from.JSON(json)
 mongo.insert(mg2,ns,bson)
