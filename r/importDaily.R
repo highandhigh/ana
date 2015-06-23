@@ -10,5 +10,9 @@ if(length(args) == 0){
 }else{
   dateStr = args[1]
 }
+#YYYYMMDD
 insertToday(mgdb,namespace,dateStr,"sh")
 insertToday(mgdb,namespace,dateStr,"sz")
+
+insertToday(mgdb,adjTable,dateStr,"sh")
+insertToday(mgdb,adjTable,dateStr,"sz")
