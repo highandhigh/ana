@@ -16,20 +16,35 @@ calAvgTFFluc = function(i,count){
 
 #day = 20,50,70,...
 # i > day
+# bad code will be deprecated
+#cannot support multiple close with different days
 sumClose = 0
 calAvgClose = function(i,count,day){
   str = paste("AvgClose",day,sep="")
   sdStr = paste("SdClose",day,sep="")
-  sumClose <<- sumClose + single[i,"Low"]
+  sumClose <<- sumClose + single[i,"Close"]
   if(count ==  day){
     single[i,str] <<- sumClose / day
     single[i,sdStr] <<- sd(single[seq(i,i-day+1),"Close"])
   }else if(count > day){
-    sumClose <<- sumClose - single[i - day,"Low"]
+    sumClose <<- sumClose - single[i - day,"Close"]
     single[i,str] <<- sumClose / day
     single[i,sdStr] <<- sd(single[seq(i,i-day+1),"Close"])
   }
-  
+}
+
+
+#sumClose_days_ must be defined before
+calAvgCloseDays = function(i,count,day){
+  str = paste("AvgClose",day,sep="")
+  strSum = paste("sumClose",day,sep="")
+  assign(strSum, get(strSum) + single[i,"Close"],envir =.GlobalEnv)
+  if(count ==  day){
+    single[i,str] <<- get(strSum) / day
+  }else if(count > day){
+    assign(strSum, get(strSum) - single[i - day,"Close"],envir =.GlobalEnv)
+    single[i,str] <<- get(strSum) / day
+  }
 }
 
 #day = 20,50,70,...

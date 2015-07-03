@@ -6,7 +6,8 @@
 #strategyStr = "20LT50StrFunc3"
 #strategyStr = "atrFunc"
 #strategyStr = "atrFunc2"
-strategyStr="BollingerFunc"
+#strategyStr="BollingerFunc"
+strategyStr="Donchian"
 source(paste("strategy/",strategyStr,".R",sep=""))
 single = subset(allStock,id =="600000")
 

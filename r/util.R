@@ -25,3 +25,11 @@ getYearPlotBoll= function(year){
   points(ss$Date,ss[,closeStr]+2.5*ss[,sdStr],col="red",pch=4)
   points(ss$Date,ss[,closeStr]-2.5*ss[,sdStr],col ="blue",pch=20)
 }
+
+getYearPlotGeneral= function(year,names){
+  ss = subset(single,  as.character(single$Date,"%Y") ==  as.character(year))
+  plot(ss$Date,ss$Close,main = paste("year:",year,sep=""),type = "l")
+  for(i in (1:length(names))){
+    points(ss$Date,ss[,names[i]],col=i,pch=i)
+  }
+}
