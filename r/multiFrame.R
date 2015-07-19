@@ -2,46 +2,50 @@
 #strategyStr = "20and50StrFunc"
 #strategyStr = "20and50StrFunc2"
 #strategyStr = "20LT50StrFunc"
-strategyStr = "20LT50StrFunc2"
+strategyStr = "20LT50All"
 #strategyStr = "20LT50StrFunc3"
 #strategyStr = "atrFunc"
 #strategyStr = "atrFunc2"
 #strategyStr="BollingerFunc"
 #strategyStr="Donchian"
 source(paste("strategy/",strategyStr,".R",sep=""))
-single = subset(allStock,id =="1896")
+source("r/metrics.R")
+source("r/turtleFunc.R")
 
 #init
+startDate = as.Date("2001-05-07")
 count = 0
 share = 0
 moneyleft = moneytotal
-single$share = 0
-single$moneyleft = 0
-single$profit = 0
+allData$share = 0
+allData$moneyleft = 0
+allData$profit = 0
 hold = c()
+record = data.frame()
 
 logFile = paste("log/",strategyStr,".log",sep="")
 file.remove(logFile)
-sink(logFile)
+#sink(logFile)
 
-#startRow = 180
-#endRow = 279
-startRow = 2
-endRow = nrow(single)
-for(i in seq(startRow,endRow-1)){
-  count = count + 1
-  
-  #calculation part
-  calc(i,count)
-  
+#df.subsets <- split(df,year(as.Date(df$V2, "%Y-%m-%d")))
+
+#for(i in seq(1,5157)){
+
+
+for(i in seq(1,10)){
+  dayData = subset(allData,as.character(allData$Date) == as.character(startDate + i) )
+  print(paste("Handling date:",startDate+i,sep=""))
+  if(nrow(dayData) <= 800){
+    print("Should be some holiday, continue")
+    next
+  }
   #action part
   #sell with stop and sell with trends
-  if(sell(i,count)) next
+  sell(dayData)
   
   #buy
-  buy(i,count)
+  buy(dayData)
 }
-
 getSummary(single,strategyStr )
 
 write.table(single,paste("log/",strategyStr,".csv",sep=""))

@@ -1,4 +1,5 @@
 # i > 1
+library(rjson)
 calTrueFluc= function(i){
   single[i,"TrueFluc"] <<- trueFluc(H=single[i,"High"],L=single[i,"Low"],PDC = single[i-1,"Close"] )
 }
@@ -14,10 +15,10 @@ calAvgTFFluc = function(i,count){
   }
 }
 
-#day = 20,50,70,...
+# day = 20,50,70,...
 # i > day
 # bad code will be deprecated
-#cannot support multiple close with different days
+# cannot support multiple close with different days
 sumClose = 0
 calAvgClose = function(i,count,day){
   str = paste("AvgClose",day,sep="")
@@ -33,19 +34,21 @@ calAvgClose = function(i,count,day){
   }
 }
 
-
-#sumClose_days_ must be defined before
-calAvgCloseDays = function(i,count,day){
-  str = paste("AvgClose",day,sep="")
-  strSum = paste("sumClose",day,sep="")
-  assign(strSum, get(strSum) + single[i,"Close"],envir =.GlobalEnv)
+#General getting all  function
+#type = Close,Open,High,Low
+calAvgTypeDays = function(day,i,count,type){
+  str = paste("Avg",type,day,sep="")
+  strSum = paste("sum",type,day,sep="")
+  assign(strSum, get(strSum) + single[i,type],envir =.GlobalEnv)
   if(count ==  day){
     single[i,str] <<- get(strSum) / day
   }else if(count > day){
-    assign(strSum, get(strSum) - single[i - day,"Close"],envir =.GlobalEnv)
+    assign(strSum, get(strSum) - single[i - day,type],envir =.GlobalEnv)
     single[i,str] <<- get(strSum) / day
   }
 }
+
+#General
 
 #day = 20,50,70,...
 # i > day
@@ -105,9 +108,9 @@ getSummary = function(df,strategyStr){
   plot(sell$Date,sell$moneyleft,type='l',col="blue",ylim = range(0,1200000),xlab="date",ylab="money",main = strategyStr)
   points(sell$Date,sell$moneyleft,pch=20)
   points(buy$Date,buy$moneyleft,pch=4,col = "green")
-  abline(coef(fit),col= "RED")
+  #abline(coef(fit),col= "RED")
   
-  yearStart = as.numeric(as.character(head(df$Date,1),"%Y"))
+  yearStart = as.numeric(as.character(df[1,]$Date,"%Y"))
   yearEnd = as.numeric(as.character(tail(df$Date,1),"%Y"))
   yearDf = data.frame(year = seq(yearStart,yearEnd))
   yearDf$value=sapply(yearDf$year,getYearEndValue,single=df)
@@ -120,7 +123,7 @@ getSummary = function(df,strategyStr){
   barplot(yearDf$value,xlab = "year",ylab = "Year End Money",col = rainbow(20))
   #max 
   cur = c()
-  
+  loss = c()
   interval = c()
   for(i in seq(2,nrow(sell)-1)){
     if(sell[i,"moneyleft"] > sell[i-1,"moneyleft"] && sell[i,"moneyleft"] > sell[i+1,"moneyleft"]){

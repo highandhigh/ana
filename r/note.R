@@ -1,5 +1,5 @@
 #install.packages("quantmod")
-
+#install.packages("lubridate")
 #setSymbolLookup(HLSN=list(name="600319.ss",src="yahoo", from="2005-07-10",to="2014-07-18"))
 #getSymbols("HLSN")
 #HLSN
@@ -13,8 +13,9 @@
 
 #awk -F',' '{print substr($1,12,8)","$2","$4","$5","$6","$9}' 20150617/sh_data.csv 
 
-allStock = read.table("test.csv",header = TRUE,sep=",")
+allStock = read.table("test.csv",header = TRUE,sep="," )
 backup = allStock
 allStock = subset(allStock,allStock$Volume > 0)
 allStock$Date  = as.Date(allStock$Date,format= "%Y-%m-%d")
 
+allData = read.table("allData.csv",header = TRUE,sep="," )
