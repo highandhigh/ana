@@ -9,7 +9,7 @@ strategyStr = "20LT50StrFunc2"
 #strategyStr="BollingerFunc"
 #strategyStr="Donchian"
 source(paste("strategy/",strategyStr,".R",sep=""))
-single = subset(allStock,id =="1896")
+single = subset(allStock,id =="600619")
 
 #init
 count = 0

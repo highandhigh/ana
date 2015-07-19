@@ -12,31 +12,31 @@ source("r/util.R")
 sell = function(dayData){
   if(share == 0) return(FALSE)
   holdingList = record[hold,"id"]
+  newHold = c()
+  profit = 0
   for(i in 1:length(holdingList)){
     optional = dayData[dayData$id == holdingList[i] & dayData$AvgLow5 < dayData$AvgHigh60,]
-    if(nrow(optional) == 0) next
-    moneyleft <<- moneyleft + optional[1,"Close"] * record[hold[i],"position"]*100
-    print("got one")
-  }
-  
-  profit = 0
-  for( i in nrow(optional)){
-    
-    profit = profit + (optional[i,"Close"] - record[hold,"Close"]) * 100 * dayData[hold[share],"position"]
+    if(nrow(optional) == 0) {
+      newHold = c(newHold,hold[i])
+      next
+    }
     share <<- share - 1
+    optional$share = share
+    moneyleft <<- moneyleft + optional[1,"Close"] * record[hold[i],"position"]*100
+    optional$"moneyleft" = moneyleft
+    profit = profit + (optional[1,"Close"] - record[hold[i],"start"]) * record[hold[i],"position"]*100
+    optional$"profit" = profit
+    optional$rate = 0
+    optional$start = record[hold[i],"start"]
+    optional$stop = record[hold[i],"stop"]
+    optional$position = record[hold[i],"position"]
+    optional$"act" = "sell"
+    record <<- rbind(record,optional)
+    print(optional)
   }
-     
-    #single stock is ok sell will sell all
-    moneytotal <<- moneyleft
-    single[i,"moneyleft"] <<- moneyleft
-    single[i,"act"] <<- "sell"
-    single[i,"profit"] <<- profit
-    print("[sell] at trend")
-    print(single[i,])
-    print("holding shares:")
-    printAllStock(hold,single)
-    hold <<- c()
-    return(TRUE)
+  if(length(hold) == length(newHold)) return(FALSE)
+  hold <<- newHold
+  return(TRUE)
 }
 
 buy = function(dayData){
@@ -76,7 +76,7 @@ buy = function(dayData){
   buyStock$share = share
   record <<- rbind(record,buyStock)
   hold <<- c(hold,nrow(record))
-  print("[buy]hoding shares:")
-  printAllStock(hold,record)
-    #cannot sell on same day
+  print(buyStock)
+  #print("[buy]hoding shares:")
+  #printAllStock(hold,record)
 }

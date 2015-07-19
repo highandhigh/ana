@@ -30,9 +30,10 @@ for( index in 6:length(idList)){
     next
   }
   count = 0
-  for(i in  2:(nrow(single)-1)){
+  for(i in  3:(nrow(single)-1)){
     count = count + 1
     calc(i,count)
+    single[i,"twoDayAgoClose"] = single[i-2,"Close"]
   }
   stocks[[index]] = single
 }

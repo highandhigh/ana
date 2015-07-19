@@ -19,3 +19,4 @@ allStock = subset(allStock,allStock$Volume > 0)
 allStock$Date  = as.Date(allStock$Date,format= "%Y-%m-%d")
 
 allData = read.table("allData.csv",header = TRUE,sep="," )
+single = subset(allData,id =="600619")
