@@ -41,7 +41,8 @@ sell = function(dayData){
 
 buy = function(dayData){
   if(moneyleft < 3000 ) return(FALSE)
-  optional = dayData[dayData$AvgLow5 > dayData$AvgHigh60 & !is.na(dayData$N),]
+  optional = dayData[dayData$AvgLow5 > dayData$AvgHigh60 & dayData$twoDayAgoClose < dayData$AvgHigh60 & (!is.na(dayData$N)) ,]
+  optional = optional[!is.na(optional$N),]
   if(nrow(optional) == 0){
     print("no optional choise")
     return(FALSE)

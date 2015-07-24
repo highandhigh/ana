@@ -17,6 +17,6 @@ allStock = read.table("test.csv",header = TRUE,sep="," )
 backup = allStock
 allStock = subset(allStock,allStock$Volume > 0)
 allStock$Date  = as.Date(allStock$Date,format= "%Y-%m-%d")
-
+allData$Date = as.Date(allData$Date,format= "%Y-%m-%d")
 allData = read.table("allData.csv",header = TRUE,sep="," )
-single = subset(allData,id =="600619")
+single = subset(allData,id =="600862")

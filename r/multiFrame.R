@@ -30,7 +30,7 @@ file.remove(logFile)
 #df.subsets <- split(df,year(as.Date(df$V2, "%Y-%m-%d")))
 
 #for(i in seq(1,5157)){
-for(i in seq(31,60)){
+for(i in seq(1,60)){
   dayData = subset(allData,as.character(allData$Date) == as.character(startDate + i) )
   print(paste("Handling date:",startDate+i,sep=""))
   if(nrow(dayData) <= 800){
@@ -42,8 +42,7 @@ for(i in seq(31,60)){
   sell(dayData)
   
   #buy
-  buy(dayData,yesterDayData)
-  yesterDayData = dayData
+  buy(dayData)
 }
 getSummary(single,strategyStr )
 

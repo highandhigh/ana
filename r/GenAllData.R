@@ -16,8 +16,8 @@ calc = function(i,count){
 
 stocks = list()
 
-#for( id in 1:length(idList)){
-for( index in 6:length(idList)){
+#for( index in 1:6){
+for( index in 1:length(idList)){
   print(paste("handling stock: ",idList[index]))
   for(type in c("Close","High","Low")){
     for(day in dayList){
@@ -37,6 +37,6 @@ for( index in 6:length(idList)){
   }
   stocks[[index]] = single
 }
-select = sapply(sapply(stocks,colnames),length) == 27
+select = (sapply(lapply(stocks,colnames),length) == 28)
 allData = do.call(rbind, stocks[select])
 write.csv(allData,file = "allData.csv")
