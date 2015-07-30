@@ -58,7 +58,7 @@ buy = function(dayData){
     #in case cannot buy in
   buyStock$start =  buyStock$Close*1.015
   buyStock$stop = buyStock$Close - buyStock$N
-  buyStock$position = as.integer( moneytotal * 0.01 / (buyStock$N*100))
+  buyStock$position = as.integer( moneytotal * 0.005 / (buyStock$N*100))
   if(buyStock$position*buyStock$start*100 > moneyleft){
     print("not enough money left to buy targe , all in")
     buyStock$position =  as.integer(moneyleft/(buyStock$start*100))
